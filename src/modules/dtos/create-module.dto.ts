@@ -8,7 +8,7 @@ export class CreateModuleDto {
     description: 'Nombre del módulo del sistema'
   })
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({
     example: 'User management module',

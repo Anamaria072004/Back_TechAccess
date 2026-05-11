@@ -6,15 +6,15 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { enviroments } from './enviroments';
-import { UsersModule } from './users/users.module';
-import { RolesModule } from './roles/roles.module';
+import { UsersModule } from 'src/features/users/users.module';
+import { RolesModule } from 'src/features/roles/roles.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { AuthModule } from './auth/auth.module';
 import { ModulesModule } from './modules/modules.module';
-import { FichaModule } from './ficha/ficha.module';
-import { RegAccesoModule } from './reg-acceso/reg-acceso.module';
-import { DispositivosModule } from './dispositivos/dispositivos.module';
-import { VehiculosModule } from './vehiculos/vehiculos.module';
+import { FichaModule } from 'src/features/ficha/ficha.module';
+import { RegAccesoModule } from 'src/features/reg-acceso/reg-acceso.module';
+import { DispositivosModule } from 'src/features/dispositivos/dispositivos.module';
+import { VehiculosModule } from 'src/features/vehiculos/vehiculos.module';
 import config from './config';
 
 @Module({
