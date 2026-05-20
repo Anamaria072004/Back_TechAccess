@@ -88,14 +88,6 @@ export class DispositivosService {
         if (!usuario) {
             throw new NotFoundException( 'Usuario no encontrado' )
         }
-
-        const existente = await this.RepositoryDispositivo.findOne({
-        where: { usuario: { id: usuarioId } }
-        });
-
-        if (existente) {
-        throw new BadRequestException('El usuario ya tiene un dispositivo registrado');
-        }
         
         const dispositivo = this.RepositoryDispositivo.create({
             ...DispositivoData,
