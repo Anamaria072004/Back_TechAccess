@@ -30,7 +30,7 @@ import config from './config';
         POSTGRES_HOST: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRES_IN: Joi.number().required(),
-        DATABASE_URL: Joi.string().optional(), // ⭐ Agregar esta línea
+        DATABASE_URL: Joi.string().optional(), // ⭐ Agregada
       }),
     }),
     DatabaseModule,
