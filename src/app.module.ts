@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
-
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { enviroments } from './enviroments';
@@ -31,6 +30,7 @@ import config from './config';
         POSTGRES_HOST: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRES_IN: Joi.number().required(),
+        DATABASE_URL: Joi.string().optional(), // ⭐ Agregar esta línea
       }),
     }),
     DatabaseModule,
