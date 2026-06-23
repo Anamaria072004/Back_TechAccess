@@ -4,7 +4,7 @@ import { IsString, IsOptional } from 'class-validator';
 export class CreateModuleDto {
 
   @ApiProperty({
-    example: 'users',
+    example: 'usuarios',
     description: 'Nombre del módulo del sistema'
   })
   @IsString()
