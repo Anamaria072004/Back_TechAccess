@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
+
     constructor(
         @InjectRepository(User) private userRepo: Repository<User>,
         private rolesService: RolesService,
@@ -17,8 +18,19 @@ export class UsersService {
         private dataSource: DataSource,
     ) { }
 
-    async findAll() {
-        return await this.userRepo.find({ relations: ['roles', 'fichas'] });
+    async findAll(options?: { page?: number; limit?: number }) {
+        const page = options?.page || 1;
+        const limit = options?.limit || 100;
+        const skip = (page - 1) * limit;
+
+        const [data, total] = await this.userRepo.findAndCount({
+            relations: ['roles', 'fichas'],
+            skip,
+            take: limit,
+            order: { id: 'DESC' },
+        });
+
+        return { data, total, page, limit };
     }
 
     async findByEmail(email: string) {
@@ -40,7 +52,7 @@ export class UsersService {
     async findOne(userId: number) {
         const user = await this.userRepo.findOne({
             where: { id: userId },
-            relations: ['roles']
+            relations: ['roles', 'fichas']
         });
         if (!user) {
             throw new NotFoundException(`User #${userId} not found`);
@@ -80,7 +92,7 @@ export class UsersService {
             });
             const savedUser = await queryRunner.manager.save(newUser);
 
-            
+
 
             await queryRunner.commitTransaction();
             return savedUser;
@@ -115,11 +127,11 @@ export class UsersService {
         }
 
         if (fichasId !== undefined) {
-          if (fichasId === null) {
-            user.fichas = null;
-          } else {
-            user.fichas = await this.fichaService.findOne(fichasId);
-          }
+            if (fichasId === null) {
+                user.fichas = null;
+            } else {
+                user.fichas = await this.fichaService.findOne(fichasId);
+            }
         }
 
         if (password) {
@@ -143,5 +155,36 @@ export class UsersService {
             throw new NotFoundException(`User #${idUser} not found`);
         }
         return { message: 'User deleted successfully' };
+    }
+
+    // src/features/users/services/users/users.service.ts
+
+    async updatePassword(email: string, password: string) {
+        // Buscamos al usuario
+        const user = await this.findByEmail(email);
+
+        if (!user) {
+            throw new NotFoundException('Usuario no encontrado');
+        }
+
+        // Actualizamos solo la contraseña
+        user.password = password;
+
+        // Guardamos los cambios en PostgreSQL
+        return await this.userRepo.save(user);
+    }
+
+    async findByDocumento (docNumber: string){
+        const user = await this.userRepo.findOne({
+            where: { docNumber },
+            relations: ['roles', 'fichas']
+        });
+
+        if (!user) {
+            throw new  NotFoundException
+            (`documento N° ${docNumber} no encontrado`);            
+        }
+
+        return user;
     }
 }

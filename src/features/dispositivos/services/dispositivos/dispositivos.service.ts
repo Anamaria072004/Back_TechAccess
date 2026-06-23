@@ -17,10 +17,19 @@ export class DispositivosService {
 
     ){}
 
-    async findAll(){
-        return await this.RepositoryDispositivo.find({
-            relations: ['usuario']
-        })
+    async findAll(options?: { page?: number; limit?: number }){
+        const page = options?.page || 1;
+        const limit = options?.limit || 100;
+        const skip = (page - 1) * limit;
+
+        const [data, total] = await this.RepositoryDispositivo.findAndCount({
+            relations: ['usuario'],
+            skip,
+            take: limit,
+            order: { id: 'DESC' },
+        });
+
+        return { data, total, page, limit };
     }
 
     async findByTipoDispositivo(tipoDispositivo: string){
@@ -78,14 +87,6 @@ export class DispositivosService {
 
         if (!usuario) {
             throw new NotFoundException( 'Usuario no encontrado' )
-        }
-
-        const existente = await this.RepositoryDispositivo.findOne({
-        where: { usuario: { id: usuarioId } }
-        });
-
-        if (existente) {
-        throw new BadRequestException('El usuario ya tiene un dispositivo registrado');
         }
         
         const dispositivo = this.RepositoryDispositivo.create({

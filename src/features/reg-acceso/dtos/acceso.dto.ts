@@ -1,24 +1,16 @@
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsBoolean, IsDate, IsInt, IsNotEmpty, IsString } from "class-validator";
+import { IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateAccesoDto {
 
-  @IsDate()
-  @IsNotEmpty()
-  @ApiProperty()
-  readonly horafecha!: Date;
-  
-  @IsBoolean()
-  @IsNotEmpty()
-  @ApiProperty()
-  readonly accion!: boolean;
-
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsString()
   readonly observacion?: string;
 
-  @IsInt({ each: true })
+  @IsNotEmpty()
+  @IsInt()
   @Type(() => Number)
   @ApiProperty()
   readonly usuarioId!: number;

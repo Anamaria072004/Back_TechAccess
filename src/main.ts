@@ -7,13 +7,18 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // ✅ Set global prefix
+  //Set global prefix
   app.setGlobalPrefix('api');
 
-  // ✅ Configurar CORS para permitir conexión desde Angular (puerto 4200)
-  app.enableCors();
+  //CORS 
+  app.enableCors({
+    //Angular permite todo (*)
+    origin: process.env.FRONTEND_URL ?? '*', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
-  // ✅ Pipes globales de validación
+  //Pipes globales de validación
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -21,6 +26,8 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // Configuración de Swagger
   const config = new DocumentBuilder()
     .setTitle('API')
     .setDescription('The haptica API description')
@@ -30,10 +37,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
+  //Puerto dinámico para Render
   const port = process.env.PORT ?? 3000;
   await app.listen(port, '0.0.0.0');
-  console.log(`Application is running on: http://localhost:${port}`);
-  console.log(`Swagger docs available at: http://localhost:${port}/docs`);
-  console.log(`API base URL for frontend:  http://localhost:${port}/api`);
+  
+  // Logs limpios para producción
+  console.log(`🚀 Application running on port: ${port}`);
 }
 bootstrap();

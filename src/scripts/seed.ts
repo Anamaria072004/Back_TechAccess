@@ -14,7 +14,7 @@ async function seed() {
     const moduleRepo = AppDataSource.getRepository(ModuleEntity);
 
     // 1. Crear módulos si no existen
-    const moduleNames = ['users', 'vehiculos', 'fichas'];
+    const moduleNames = ['users', 'vehiculos', 'fichas', 'roles', 'dispositivos', 'accesos'];
     const modules: ModuleEntity[] = [];
 
     for (const name of moduleNames) {
@@ -56,9 +56,9 @@ async function seed() {
         name: 'Admin',
         lastName: 'Sena',
         docType: 'CC',
-        docNumber: '12345678',
+        docNumber: '1012334567',
         email: email,
-        telephone: '3001234567',
+        telephone: '3103552788',
         FamTelephone: '3010000000',
         state: 'activo',
         password: hashedPassword,
@@ -72,9 +72,9 @@ async function seed() {
     }
 
     await AppDataSource.destroy();
-    console.log('🏁 Proceso de semilla completado con éxito.');
+    console.log('Proceso de semilla completado con éxito.');
   } catch (err) {
-    console.error('❌ Error durante la ejecución del seed:', err);
+    console.error('Error durante la ejecución del seed:', err);
   }
 }
 

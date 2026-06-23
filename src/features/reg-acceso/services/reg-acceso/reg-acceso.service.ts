@@ -49,12 +49,20 @@ export class RegAccesoService {
   }
 
   async findAll(): Promise<Acceso[]> {
-    return this.accesoRepository.find();
+    return this.accesoRepository.find({
+      relations: ['usuario'],
+      order: {
+        horaFecha: 'DESC',
+      },
+    });
   }
 
   async findOne(id: number): Promise<Acceso> {
-    return this.accesoRepository.findOneOrFail({ where: { id } });
-}
+    return this.accesoRepository.findOneOrFail({
+      where: { id },
+      relations: ['usuario'],
+    });
+  }
 
   async update(id: number, updateAccesoDto: UpdateAccesoDto): Promise<Acceso> {
     await this.accesoRepository.update(id, updateAccesoDto);
